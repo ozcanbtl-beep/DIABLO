@@ -8,6 +8,7 @@ A local-first helper for reviewing Diablo Immortal screenshots and organizing ma
 - Parse conservative character-stat and equipment text candidates from OCR.
 - Validate a manually completed character profile JSON file.
 - Summarize recorded character attributes, equipment slots, legendary gems, and set-bonus entries.
+- Generate a conservative PvE report from player-confirmed skills, combinations, and recorded upgraded equipment.
 - Run automated tests with GitHub Actions.
 
 ## Character profile
@@ -19,6 +20,14 @@ Validate and summarize the profile locally:
 ```bash
 python main.py --profile data/character_profile.json
 ```
+
+Generate a PvE-focused report:
+
+```bash
+python main.py --profile data/character_profile.json --pve
+```
+
+The PvE report lists only player-confirmed skills, combinations, and known equipment. It highlights missing item essences, set bonuses, and gem details instead of guessing an optimal build.
 
 Run screenshot OCR locally:
 
