@@ -1,0 +1,22 @@
+{
+  "game": "Diablo Immortal",
+  "character": {
+    "name": "",
+    "class": "",
+    "level": null,
+    "paragon_level": null,
+    "combat_rating": null,
+    "resonance": null,
+    "primary_attributes": {
+      "strength": null,
+      "intelligence": null,
+      "fortitude": null,
+      "vitality": null,
+      "willpower": null
+    }
+  },
+  "equipment": [],
+  "legendary_gems": [],
+  "set_bonuses": [],
+  "notes": "Fill only values visible in the player's own game screens. Unknown values stay null."
+}
