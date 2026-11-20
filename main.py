@@ -1,7 +1,6 @@
-"""DIABLO Immortal Assistant: offline screenshot inspection only.
+"""DIABLO Immortal Assistant: offline screenshot and profile inspection.
 
 This module does not control the game, send inputs, or automate gameplay.
-It extracts basic image metadata and, when available, OCR text for review.
 """
 from __future__ import annotations
 
@@ -10,6 +9,7 @@ import json
 from pathlib import Path
 from typing import Any
 
+from build_analyzer import load_profile, summarize_profile
 from diablo_parser import parse_game_text
 
 
@@ -50,12 +50,21 @@ def analyze_image(image_path: str | Path) -> dict[str, Any]:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Inspect a Diablo Immortal screenshot.")
-    parser.add_argument("image", help="Path to a screenshot image (PNG/JPG/WebP).")
+    parser = argparse.ArgumentParser(
+        description="Inspect a Diablo Immortal screenshot or character profile."
+    )
+    source = parser.add_mutually_exclusive_group(required=True)
+    source.add_argument("--image", help="Path to a screenshot image (PNG/JPG/WebP).")
+    source.add_argument("--profile", help="Path to a manually completed character profile JSON.")
     args = parser.parse_args()
+
     try:
-        print(json.dumps(analyze_image(args.image), ensure_ascii=False, indent=2))
-    except (FileNotFoundError, RuntimeError, OSError) as exc:
+        if args.profile:
+            result = summarize_profile(load_profile(args.profile))
+        else:
+            result = analyze_image(args.image)
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+    except (FileNotFoundError, RuntimeError, OSError, ValueError, json.JSONDecodeError) as exc:
         parser.error(str(exc))
     return 0
 
