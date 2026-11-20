@@ -77,6 +77,11 @@
     "purple_upgrade_tier_slots": [
       "chest",
       "primary_weapon"
-    ]
+    ],
+    "purple_primary_weapon": {
+      "name": "Ebedi Döngü",
+      "type": "Asa",
+      "upgrade_tier": "purple"
+    }
   }
 }
