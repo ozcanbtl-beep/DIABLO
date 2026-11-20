@@ -37,6 +37,12 @@ python main.py --image path/to/screenshot.png
 
 Install dependencies with `pip install -r requirements.txt`. Tesseract OCR must also be installed on the computer for OCR to work.
 
+## Android companion prototype
+
+The native Android starter project is in `android/`. It displays the recorded Druid profile and requests Android's screen-sharing consent through the system dialog. This first prototype does not capture or save frames, does not send touch input, and does not automate combat.
+
+To build a debug APK, open the **Actions** tab and run **Android Companion APK**. Download the `diablo-assistant-debug-apk` artifact from the completed run. The APK is a development build, not a Play Store release.
+
 ## Android yardımcı uygulama planı
 
 Android tablet üzerinde çalışabilecek ayrı yardımcı uygulamanın teknik planı ve kısıtları için [Android yardımcı uygulama planına](docs/ANDROID_COMPANION_PLAN_TR.md) bak. Bu plan henüz çalışan Android uygulaması veya otomatik oyun kontrolü değildir.
