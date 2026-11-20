@@ -31,6 +31,11 @@
       "PvE"
     ],
     "playstyle": "Hybrid: close-range combat and ranged nature magic",
-    "build_priority": "Balanced: damage, defense, and critical performance"
+    "build_priority": "Balanced: damage, defense, and critical performance",
+    "legendary_gem_star_ratings": [
+      2,
+      3
+    ],
+    "legendary_gem_details": "Player reports having 2-star and 3-star legendary gems; individual names and quantities are not yet known."
   }
 }
