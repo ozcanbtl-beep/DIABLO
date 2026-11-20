@@ -10,7 +10,7 @@
     "primary_attributes": {
       "strength": 17000,
       "intelligence": 520,
-      "fortitude": null,
+      "fortitude": 13000,
       "vitality": null,
       "willpower": null
     }
