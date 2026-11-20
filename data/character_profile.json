@@ -51,6 +51,10 @@
       "Kuduz Kudret",
       "Kuzgun Sürüsü"
     ],
-    "notes": "Skill names recorded exactly as provided by the player; verify exact in-game names and selected skill variants later."
+    "notes": "Player reports using these five skills in both PvE and PvP; exact in-game names and skill variants can be verified later.",
+    "activities_used_for": [
+      "PvE",
+      "PvP"
+    ]
   }
 }
