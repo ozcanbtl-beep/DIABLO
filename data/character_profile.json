@@ -24,7 +24,7 @@
   "equipment": [],
   "legendary_gems": [],
   "set_bonuses": [],
-  "notes": "Values manually provided by the player. Character level and primary attributes are not yet provided.",
+  "notes": "Values manually provided by the player. Character level is not yet provided.",
   "combat_preferences": {
     "activities": [
       "PvP",
@@ -41,7 +41,8 @@
     "two_star_legendary_gem_count": {
       "min": 5,
       "max": 6
-    }
+    },
+    "current_analysis_focus": "PvE: maximize effective damage against monsters"
   },
   "skills": {
     "player_reported_names": [
