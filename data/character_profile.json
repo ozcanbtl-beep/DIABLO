@@ -67,5 +67,10 @@
       "Kuduz Kudret is used for both increasing the player's damage and dealing direct damage to enemies.",
       "One of the player's combos is to summon/use Kuzgun Sürüsü while attacking with Ateşli Hortum at the same time."
     ]
+  },
+  "equipment_overview": {
+    "legendary_items_present": true,
+    "set_items_present": true,
+    "notes": "Player reports having both orange legendary equipment and green set equipment; individual slots and item names are not yet recorded."
   }
 }
