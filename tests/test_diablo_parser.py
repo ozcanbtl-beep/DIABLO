@@ -25,3 +25,15 @@ def test_missing_values_stay_unknown():
 def test_detects_equipment_slots():
     result = parse_game_text("Head Chest Main Hand Off Hand")
     assert result["equipment_slots_mentioned"] == ["Head", "Chest", "Main Hand", "Off Hand"]
+
+
+def test_detects_gem_and_set_sections_and_rarity():
+    result = parse_game_text("Legendary Gem Set Bonuses Legendary Head")
+    assert result["legendary_gem_section_detected"] is True
+    assert result["set_bonus_section_detected"] is True
+    assert "Legendary" in result["item_rarity_candidates"]
+
+
+def test_class_matching_uses_word_boundaries():
+    result = parse_game_text("The wizardry skill is powerful")
+    assert result["character_class_candidates"] == []
