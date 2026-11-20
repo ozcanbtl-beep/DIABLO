@@ -82,6 +82,10 @@
       "name": "Ebedi Döngü",
       "type": "Asa",
       "upgrade_tier": "purple"
+    },
+    "purple_chest_armor": {
+      "name": "Verimlilik Ceketi",
+      "upgrade_tier": "purple"
     }
   }
 }
