@@ -37,6 +37,10 @@ python main.py --image path/to/screenshot.png
 
 Install dependencies with `pip install -r requirements.txt`. Tesseract OCR must also be installed on the computer for OCR to work.
 
+## Android yardımcı uygulama planı
+
+Android tablet üzerinde çalışabilecek ayrı yardımcı uygulamanın teknik planı ve kısıtları için [Android yardımcı uygulama planına](docs/ANDROID_COMPANION_PLAN_TR.md) bak. Bu plan henüz çalışan Android uygulaması veya otomatik oyun kontrolü değildir.
+
 ## Safety and limitations
 
 This project does not log in to the game, inspect game memory, bypass protections, send touch/key inputs, or play automatically. GitHub Actions is used for code tests, not to control the game running on your tablet. OCR output may be inaccurate; verify all values against the game screen. The profile summary reports supplied data only; it does not claim an item or build is best without verified game rules and complete player data.
