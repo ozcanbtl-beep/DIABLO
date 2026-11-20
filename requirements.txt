@@ -1,0 +1,11 @@
+# Core image and screenshot analysis
+Pillow>=10.0,<13.0
+numpy>=1.26,<3.0
+opencv-python-headless>=4.9,<5.0
+
+# OCR for reading game screenshots
+pytesseract>=0.3.10,<0.4
+
+# Configuration and tests
+PyYAML>=6.0,<7.0
+pytest>=8.0,<10.0
