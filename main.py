@@ -10,6 +10,8 @@ import json
 from pathlib import Path
 from typing import Any
 
+from diablo_parser import parse_game_text
+
 
 def analyze_image(image_path: str | Path) -> dict[str, Any]:
     """Return image metadata and optional OCR text from a local screenshot."""
@@ -43,6 +45,7 @@ def analyze_image(image_path: str | Path) -> dict[str, Any]:
         except Exception as exc:  # Tesseract binary may not exist on this machine.
             result["notes"].append(f"OCR could not run: {exc}")
 
+    result["game_data_candidates"] = parse_game_text(result["text"])
     return result
 
 
