@@ -31,3 +31,7 @@ Install dependencies with `pip install -r requirements.txt`. Tesseract OCR must 
 ## Safety and limitations
 
 This project does not log in to the game, inspect game memory, bypass protections, send touch/key inputs, or play automatically. GitHub Actions is used for code tests, not to control the game running on your tablet. OCR output may be inaccurate; verify all values against the game screen. The profile summary reports supplied data only; it does not claim an item or build is best without verified game rules and complete player data.
+
+## Türkçe karakter profili girişi
+
+Karakter bilgilerini toplamak için [Türkçe profil giriş kılavuzunu](data/profile_entry_guide_tr.md) kullan. JSON dosyasını tablette düzenlemek zorunda değilsin; bilgileri sohbet içinde bölüm bölüm paylaşabilirsin. Bilinmeyen değerler boş bırakılır ve hiçbir istatistik tahmin edilmez.
