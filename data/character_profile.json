@@ -30,6 +30,7 @@
       "PvP",
       "PvE"
     ],
-    "playstyle": "Hybrid: close-range combat and ranged nature magic"
+    "playstyle": "Hybrid: close-range combat and ranged nature magic",
+    "build_priority": "Balanced: damage, defense, and critical performance"
   }
 }
