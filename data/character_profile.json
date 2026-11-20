@@ -81,11 +81,13 @@
     "purple_primary_weapon": {
       "name": "Ebedi Döngü",
       "type": "Asa",
-      "upgrade_tier": "purple"
+      "upgrade_tier": "purple",
+      "combat_rating": 3301
     },
     "purple_chest_armor": {
       "name": "Verimlilik Ceketi",
-      "upgrade_tier": "purple"
+      "upgrade_tier": "purple",
+      "combat_rating": 3287
     }
   }
 }
