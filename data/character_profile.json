@@ -24,5 +24,12 @@
   "equipment": [],
   "legendary_gems": [],
   "set_bonuses": [],
-  "notes": "Values manually provided by the player. Character level and primary attributes are not yet provided."
+  "notes": "Values manually provided by the player. Character level and primary attributes are not yet provided.",
+  "combat_preferences": {
+    "activities": [
+      "PvP",
+      "PvE"
+    ],
+    "playstyle": "Hybrid: close-range combat and ranged nature magic"
+  }
 }
