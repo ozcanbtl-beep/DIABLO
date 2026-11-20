@@ -42,5 +42,15 @@
       "min": 5,
       "max": 6
     }
+  },
+  "skills": {
+    "player_reported_names": [
+      "Heyelan",
+      "Ateşli Hortum",
+      "Diken Zırh",
+      "Kuduz Kudret",
+      "Kuzgun Sürüsü"
+    ],
+    "notes": "Skill names recorded exactly as provided by the player; verify exact in-game names and selected skill variants later."
   }
 }
