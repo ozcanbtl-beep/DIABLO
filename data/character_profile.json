@@ -71,8 +71,12 @@
   "equipment_overview": {
     "legendary_items_present": true,
     "set_items_present": true,
-    "notes": "Player reports having both orange legendary equipment and green set equipment, with 2 armor pieces at the purple upgrade tier.",
+    "notes": "Player reports both orange legendary equipment and green set equipment. Two pieces are at the purple upgrade tier: one chest armor piece and one primary weapon.",
     "purple_upgrade_tier_count": 2,
-    "purple_upgrade_tier_type": "armor"
+    "purple_upgrade_tier_type": "one chest armor piece and one primary weapon",
+    "purple_upgrade_tier_slots": [
+      "chest",
+      "primary_weapon"
+    ]
   }
 }
