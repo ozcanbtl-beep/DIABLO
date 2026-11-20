@@ -71,6 +71,7 @@
   "equipment_overview": {
     "legendary_items_present": true,
     "set_items_present": true,
-    "notes": "Player reports having both orange legendary equipment and green set equipment; individual slots and item names are not yet recorded."
+    "notes": "Player reports having both orange legendary equipment and green set equipment. They first reported 2 pieces at the purple upgrade tier, then reported 2 more among the remaining equipment; interpreted as 4 total purple-tier pieces. Confirm if this interpretation is incorrect.",
+    "purple_upgrade_tier_count": 4
   }
 }
