@@ -1,0 +1,28 @@
+{
+  "game": "Diablo Immortal",
+  "character": {
+    "name": "",
+    "class": "Druid",
+    "level": null,
+    "paragon_level": 1635,
+    "combat_rating": 62000,
+    "resonance": 794,
+    "primary_attributes": {
+      "strength": null,
+      "intelligence": null,
+      "fortitude": null,
+      "vitality": null,
+      "willpower": null
+    }
+  },
+  "combat_stats": {
+    "damage": 27794,
+    "life": 338000,
+    "armor": 2745,
+    "armor_penetration": 2700
+  },
+  "equipment": [],
+  "legendary_gems": [],
+  "set_bonuses": [],
+  "notes": "Values manually provided by the player. Character level and primary attributes are not yet provided."
+}
