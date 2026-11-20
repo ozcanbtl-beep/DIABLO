@@ -11,6 +11,7 @@ from typing import Any
 
 from build_analyzer import load_profile, summarize_profile
 from diablo_parser import parse_game_text
+from pve_advisor import analyze_pve_profile
 
 
 def analyze_image(image_path: str | Path) -> dict[str, Any]:
@@ -56,11 +57,16 @@ def main() -> int:
     source = parser.add_mutually_exclusive_group(required=True)
     source.add_argument("--image", help="Path to a screenshot image (PNG/JPG/WebP).")
     source.add_argument("--profile", help="Path to a manually completed character profile JSON.")
+    parser.add_argument("--pve", action="store_true", help="Generate a PvE-focused report from the supplied profile.")
     args = parser.parse_args()
+
+    if args.pve and not args.profile:
+        parser.error("--pve requires --profile.")
 
     try:
         if args.profile:
-            result = summarize_profile(load_profile(args.profile))
+            profile = load_profile(args.profile)
+            result = analyze_pve_profile(profile) if args.pve else summarize_profile(profile)
         else:
             result = analyze_image(args.image)
         print(json.dumps(result, ensure_ascii=False, indent=2))
