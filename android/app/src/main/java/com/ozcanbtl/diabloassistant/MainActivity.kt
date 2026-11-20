@@ -4,8 +4,9 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.media.projection.MediaProjectionManager
+import android.net.Uri
 import android.os.Bundle
-import android.view.Gravity
+import android.provider.Settings
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
@@ -15,16 +16,15 @@ import android.widget.TextView
 class MainActivity : Activity() {
     private lateinit var status: TextView
     private val captureRequestCode = 4102
+    private val overlayRequestCode = 4103
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         val pad = (18 * resources.displayMetrics.density).toInt()
         val column = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             setPadding(pad, pad, pad, pad)
         }
-
         fun heading(text: String, size: Float = 20f) {
             column.addView(TextView(this).apply {
                 this.text = text
@@ -32,41 +32,51 @@ class MainActivity : Activity() {
                 setPadding(0, pad / 2, 0, pad / 2)
             })
         }
-
         heading("DIABLO Assistant", 26f)
-        heading("Android yardımcı uygulama • İlk prototip", 15f)
-        heading("Karakter profili", 19f)
+        heading("Oyun üstü kontrol paneli", 18f)
         heading("Sınıf: Druid\nParagon: 1635\nÇarpışma Puanı: 62.000\nRezonans: 794\nHasar: 27.000\nCan: 338.000")
         heading("PvE becerileri", 19f)
         heading("Heyelan • Ateşli Hortum • Diken Zırh\nKuduz Kudret • Kuzgun Sürüsü")
         heading("Durum", 19f)
         status = TextView(this).apply {
-            text = "Henüz ekran izni verilmedi. Bu prototip oyun içinde dokunma yapmaz ve otomatik savaşmaz."
             textSize = 15f
+            text = "Kayan simge izni bekleniyor."
             setPadding(0, pad / 2, 0, pad)
         }
         column.addView(status)
-
+        column.addView(Button(this).apply {
+            text = "Oyun üstü simgeyi etkinleştir"
+            setOnClickListener { requestOverlayPermission() }
+        })
         column.addView(Button(this).apply {
             text = "Ekran paylaşım iznini iste"
             setOnClickListener { requestScreenPermission() }
         })
-        column.addView(Button(this).apply {
-            text = "İzin durumunu sıfırla"
-            setOnClickListener {
-                status.text = "Durum sıfırlandı. Ekran kaydı başlatılmadı."
-            }
-        })
-        heading("Güvenlik", 19f)
-        heading("Ekran paylaşımı Android'in sistem penceresiyle onaylanır. Bu sürüm yalnızca izin akışını doğrular; görüntü kaydetmez, dokunma göndermez, oyun belleğine erişmez ve anti-cheat atlatmaz.", 14f)
+        heading("Nasıl kullanılır?", 19f)
+        heading("İzin verdikten sonra Diablo Immortal'ı aç. Ekranın üstünde DIABLO simgesi kalır. Simgeye dokununca kontrol paneli açılır; Kapat düğmesiyle küçültüp oyuna dönersin.", 15f)
+        heading("Not: Bu panel yalnızca arayüzdür. Şimdilik oyun içi dokunma veya otomatik savaş yapmaz.", 14f)
+        setContentView(ScrollView(this).apply { addView(column) },
+            ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
+        if (Settings.canDrawOverlays(this)) startOverlayService()
+    }
 
-        val scroll = ScrollView(this).apply {
-            addView(column)
+    private fun requestOverlayPermission() {
+        if (Settings.canDrawOverlays(this)) {
+            startOverlayService()
+            status.text = "Kayan simge etkinleştirildi. Oyuna geçebilirsin."
+        } else {
+            val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                Uri.parse("package:$packageName"))
+            startActivityForResult(intent, overlayRequestCode)
         }
-        setContentView(scroll, ViewGroup.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.MATCH_PARENT
-        ))
+    }
+
+    private fun startOverlayService() {
+        if (Settings.canDrawOverlays(this)) {
+            val intent = Intent(this, OverlayControlService::class.java)
+            startService(intent)
+            status.text = "Kayan DIABLO simgesi etkin. Oyun üzerinde simgeye dokun."
+        }
     }
 
     private fun requestScreenPermission() {
@@ -74,15 +84,16 @@ class MainActivity : Activity() {
         startActivityForResult(manager.createScreenCaptureIntent(), captureRequestCode)
     }
 
-    @Deprecated("Deprecated by Android; retained for broad device compatibility in this prototype")
+    @Deprecated("Deprecated by Android; retained for broad device compatibility")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == captureRequestCode) {
-            status.text = if (resultCode == RESULT_OK && data != null) {
-                "Android ekran paylaşım iznini verdi. Bu ilk prototip görüntüyü henüz yakalamıyor veya kaydetmiyor."
-            } else {
-                "Ekran paylaşım izni verilmedi. Uygulama normal şekilde bekliyor."
-            }
+        if (requestCode == overlayRequestCode) {
+            if (Settings.canDrawOverlays(this)) startOverlayService()
+            else status.text = "Kayan simge izni verilmedi."
+        } else if (requestCode == captureRequestCode) {
+            status.text = if (resultCode == RESULT_OK && data != null)
+                "Ekran paylaşım izni verildi; bu sürüm görüntüyü henüz işlemiyor."
+            else "Ekran paylaşım izni verilmedi."
         }
     }
 }
