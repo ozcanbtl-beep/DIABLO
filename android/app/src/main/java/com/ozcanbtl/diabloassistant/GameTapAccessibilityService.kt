@@ -22,6 +22,7 @@ class GameTapAccessibilityService : AccessibilityService() {
     private val handler = Handler(Looper.getMainLooper())
     private var running = false
     private var receiverRegistered = false
+    private var gestureInProgress = false
     private var nextSkillIndex = 0
     private val skillCooldownsMs = longArrayOf(9_000L, 9_000L, 15_000L, 6_000L)
     private var nextSkillAt = LongArray(skillCooldownsMs.size)
@@ -64,22 +65,25 @@ class GameTapAccessibilityService : AccessibilityService() {
     private fun startAttack() {
         if (running) return
         running = true
+        gestureInProgress = false
         val now = SystemClock.uptimeMillis()
         nextSkillAt = LongArray(skillCooldownsMs.size) { index ->
-            now + index * 250L
+            now + index * 350L
         }
         nextSkillIndex = 0
+        handler.removeCallbacks(attackLoop)
         handler.post(attackLoop)
     }
 
     private fun stopAttack() {
         running = false
+        gestureInProgress = false
         handler.removeCallbacks(attackLoop)
     }
 
     private val attackLoop = object : Runnable {
         override fun run() {
-            if (!running) return
+            if (!running || gestureInProgress) return
 
             val now = SystemClock.uptimeMillis()
             var selected = -1
@@ -91,27 +95,46 @@ class GameTapAccessibilityService : AccessibilityService() {
                 }
             }
 
-            if (selected >= 0) {
-                val w = resources.displayMetrics.widthPixels.toFloat()
-                val h = resources.displayMetrics.heightPixels.toFloat()
-                val (xRatio, yRatio) = skillTaps[selected]
-                dispatchTap(w * xRatio, h * yRatio)
-                nextSkillAt[selected] = now + skillCooldownsMs[selected]
-                nextSkillIndex = (selected + 1) % skillTaps.size
-                handler.postDelayed(this, 180L)
-            } else {
+            if (selected < 0) {
                 val nextReadyAt = nextSkillAt.minOrNull() ?: (now + 500L)
-                handler.postDelayed(this, (nextReadyAt - now).coerceAtLeast(80L))
+                handler.postDelayed(this, (nextReadyAt - now).coerceAtLeast(100L))
+                return
+            }
+
+            val w = resources.displayMetrics.widthPixels.toFloat()
+            val h = resources.displayMetrics.heightPixels.toFloat()
+            val (xRatio, yRatio) = skillTaps[selected]
+            gestureInProgress = true
+
+            val accepted = dispatchTap(w * xRatio, h * yRatio, selected)
+            if (!accepted) {
+                gestureInProgress = false
+                handler.postDelayed(this, 500L)
             }
         }
     }
 
-    private fun dispatchTap(x: Float, y: Float) {
+    private fun dispatchTap(x: Float, y: Float, skillIndex: Int): Boolean {
         val path = Path().apply { moveTo(x, y) }
         val gesture = GestureDescription.Builder()
-            .addStroke(GestureDescription.StrokeDescription(path, 0, 70))
+            .addStroke(GestureDescription.StrokeDescription(path, 0, 90))
             .build()
-        dispatchGesture(gesture, null, null)
+
+        return dispatchGesture(gesture, object : GestureResultCallback() {
+            override fun onCompleted(gestureDescription: GestureDescription?) {
+                gestureInProgress = false
+                if (!running) return
+                nextSkillAt[skillIndex] =
+                    SystemClock.uptimeMillis() + skillCooldownsMs[skillIndex]
+                nextSkillIndex = (skillIndex + 1) % skillTaps.size
+                handler.postDelayed(attackLoop, 250L)
+            }
+
+            override fun onCancelled(gestureDescription: GestureDescription?) {
+                gestureInProgress = false
+                if (running) handler.postDelayed(attackLoop, 500L)
+            }
+        }, handler)
     }
 
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {}
