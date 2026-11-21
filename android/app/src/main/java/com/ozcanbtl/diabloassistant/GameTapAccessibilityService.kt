@@ -10,6 +10,7 @@ import android.graphics.Path
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
+import android.os.SystemClock
 import android.view.accessibility.AccessibilityEvent
 
 class GameTapAccessibilityService : AccessibilityService() {
@@ -20,8 +21,19 @@ class GameTapAccessibilityService : AccessibilityService() {
 
     private val handler = Handler(Looper.getMainLooper())
     private var running = false
-    private var step = 0
     private var receiverRegistered = false
+    private var nextSkillIndex = 0
+    private val skillCooldownsMs = longArrayOf(9_000L, 9_000L, 15_000L, 6_000L)
+    private var nextSkillAt = LongArray(skillCooldownsMs.size)
+
+    // Fixed landscape positions: Fire Tornado, Thorn Armor, Rabid Might, Raven Swarm.
+    // Landslide / primary attack is intentionally excluded.
+    private val skillTaps = listOf(
+        Pair(0.72f, 0.86f),
+        Pair(0.79f, 0.86f),
+        Pair(0.86f, 0.86f),
+        Pair(0.93f, 0.86f)
+    )
 
     private val commandReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
@@ -52,7 +64,11 @@ class GameTapAccessibilityService : AccessibilityService() {
     private fun startAttack() {
         if (running) return
         running = true
-        step = 0
+        val now = SystemClock.uptimeMillis()
+        nextSkillAt = LongArray(skillCooldownsMs.size) { index ->
+            now + index * 250L
+        }
+        nextSkillIndex = 0
         handler.post(attackLoop)
     }
 
@@ -64,20 +80,29 @@ class GameTapAccessibilityService : AccessibilityService() {
     private val attackLoop = object : Runnable {
         override fun run() {
             if (!running) return
-            val w = resources.displayMetrics.widthPixels.toFloat()
-            val h = resources.displayMetrics.heightPixels.toFloat()
-            // Provisional landscape tap positions; this is a fixed macro, not enemy detection.
-            val taps = listOf(
-                Pair(0.72f, 0.86f), // Ateş Hortumu
-                Pair(0.79f, 0.86f), // Dikenli Zırh
-                Pair(0.86f, 0.86f), // Kuduz Kudret
-                Pair(0.93f, 0.86f), // Kuzgun Sürüsü
-                Pair(0.95f, 0.69f)  // Heyelan / temel saldırı
-            )
-            val (xRatio, yRatio) = taps[step % taps.size]
-            dispatchTap(w * xRatio, h * yRatio)
-            step++
-            handler.postDelayed(this, if (step % taps.size == 0) 220L else 420L)
+
+            val now = SystemClock.uptimeMillis()
+            var selected = -1
+            for (offset in skillTaps.indices) {
+                val index = (nextSkillIndex + offset) % skillTaps.size
+                if (now >= nextSkillAt[index]) {
+                    selected = index
+                    break
+                }
+            }
+
+            if (selected >= 0) {
+                val w = resources.displayMetrics.widthPixels.toFloat()
+                val h = resources.displayMetrics.heightPixels.toFloat()
+                val (xRatio, yRatio) = skillTaps[selected]
+                dispatchTap(w * xRatio, h * yRatio)
+                nextSkillAt[selected] = now + skillCooldownsMs[selected]
+                nextSkillIndex = (selected + 1) % skillTaps.size
+                handler.postDelayed(this, 180L)
+            } else {
+                val nextReadyAt = nextSkillAt.minOrNull() ?: (now + 500L)
+                handler.postDelayed(this, (nextReadyAt - now).coerceAtLeast(80L))
+            }
         }
     }
 
