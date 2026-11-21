@@ -94,6 +94,15 @@ class OverlayControlService : Service() {
             }
         })
         content.addView(Button(this).apply { text = "Kapat ve oyuna dön"; setOnClickListener { hidePanel() } })
+        content.addView(Button(this).apply {
+            text = "PROGRAMI KAPAT"
+            setOnClickListener {
+                val stop = Intent(GameTapAccessibilityService.ACTION_STOP)
+                sendBroadcast(stop.setPackage(packageName))
+                stopService(Intent(this@OverlayControlService, ScreenCaptureService::class.java))
+                stopSelf()
+            }
+        })
         panel = content
         windowManager.addView(
             content,
