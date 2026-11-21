@@ -66,16 +66,14 @@ class OverlayControlService : Service() {
         content.addView(Button(this).apply {
             text = "OTOMATİK SALDIRIYI BAŞLAT"
             setOnClickListener {
-                val start = Intent(this@OverlayControlService, GameTapAccessibilityService::class.java)
-                    .setAction(GameTapAccessibilityService.ACTION_START)
+                val start = Intent(GameTapAccessibilityService.ACTION_START)
                 sendBroadcast(start.setPackage(packageName))
             }
         })
         content.addView(Button(this).apply {
             text = "SALDIRIYI DURDUR"
             setOnClickListener {
-                val stop = Intent(this@OverlayControlService, GameTapAccessibilityService::class.java)
-                    .setAction(GameTapAccessibilityService.ACTION_STOP)
+                val stop = Intent(GameTapAccessibilityService.ACTION_STOP)
                 sendBroadcast(stop.setPackage(packageName))
             }
         })
