@@ -26,16 +26,10 @@
   "set_bonuses": [],
   "notes": "Values manually provided by the player. Character level is not yet provided.",
   "combat_preferences": {
-    "activities": [
-      "PvP",
-      "PvE"
-    ],
+    "activities": ["PvE"],
     "playstyle": "Hybrid: close-range combat and ranged nature magic",
     "build_priority": "Balanced: damage, defense, and critical performance",
-    "legendary_gem_star_ratings": [
-      2,
-      3
-    ],
+    "legendary_gem_star_ratings": [2, 3],
     "legendary_gem_details": "Player reports having 2-star and 3-star legendary gems; individual names and quantities are not yet known.",
     "three_star_legendary_gem_count": 2,
     "two_star_legendary_gem_count": {
@@ -47,27 +41,25 @@
   "skills": {
     "player_reported_names": [
       "Heyelan",
-      "Ateşli Hortum",
-      "Diken Zırh",
+      "Ateş Hortumu",
+      "Dikenli Zırh",
       "Kuduz Kudret",
       "Kuzgun Sürüsü"
     ],
-    "notes": "Player reports using these five skills in both PvE and PvP; exact in-game names and skill variants can be verified later.",
-    "activities_used_for": [
-      "PvE",
-      "PvP"
+    "activities_used_for": ["PvE"],
+    "basic_attack": "Heyelan",
+    "basic_attack_role": "Primary/basic attack; used for regular direct hits between skill actions.",
+    "synergistic_skill_group": [
+      "Ateş Hortumu",
+      "Dikenli Zırh",
+      "Kuduz Kudret",
+      "Kuzgun Sürüsü"
     ],
     "combination_notes": [
-      "Ateşli Hortum is combined with Kuduz Kudret.",
-      "Ateşli Hortum is combined with Kuzgun Sürüsü."
+      "The player states that Ateş Hortumu, Dikenli Zırh, Kuduz Kudret, and Kuzgun Sürüsü trigger or activate one another and must be treated as one synergistic skill group.",
+      "Heyelan is not part of that skill-trigger group; it is the regular basic attack."
     ],
-    "role_notes": [
-      "Heyelan is used by the player as a basic/primary attack.",
-      "Ateşli Hortum is combined with Kuduz Kudret and Kuzgun Sürüsü.",
-      "Diken Zırh is used primarily for defense.",
-      "Kuduz Kudret is used for both increasing the player's damage and dealing direct damage to enemies.",
-      "One of the player's combos is to summon/use Kuzgun Sürüsü while attacking with Ateşli Hortum at the same time."
-    ]
+    "notes": "Skill synergy and roles are recorded according to the player's description. Exact trigger conditions and timing have not yet been independently verified in-game."
   },
   "equipment_overview": {
     "legendary_items_present": true,
@@ -75,10 +67,7 @@
     "notes": "Player reports both orange legendary equipment and green set equipment. Two pieces are at the purple upgrade tier: one chest armor piece and one primary weapon.",
     "purple_upgrade_tier_count": 2,
     "purple_upgrade_tier_type": "one chest armor piece and one primary weapon",
-    "purple_upgrade_tier_slots": [
-      "chest",
-      "primary_weapon"
-    ],
+    "purple_upgrade_tier_slots": ["chest", "primary_weapon"],
     "purple_primary_weapon": {
       "name": "Ebedi Döngü",
       "type": "Asa",
