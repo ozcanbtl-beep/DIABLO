@@ -68,7 +68,7 @@ class OverlayControlService : Service() {
             setOnClickListener {
                 val start = Intent(this@OverlayControlService, GameTapAccessibilityService::class.java)
                     .setAction(GameTapAccessibilityService.ACTION_START)
-                startService(start)
+                sendBroadcast(start.setPackage(packageName))
             }
         })
         content.addView(Button(this).apply {
@@ -76,7 +76,7 @@ class OverlayControlService : Service() {
             setOnClickListener {
                 val stop = Intent(this@OverlayControlService, GameTapAccessibilityService::class.java)
                     .setAction(GameTapAccessibilityService.ACTION_STOP)
-                startService(stop)
+                sendBroadcast(stop.setPackage(packageName))
             }
         })
         content.addView(Button(this).apply {
