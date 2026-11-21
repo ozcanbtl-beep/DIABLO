@@ -68,7 +68,7 @@ class GameTapAccessibilityService : AccessibilityService() {
         gestureInProgress = false
         val now = SystemClock.uptimeMillis()
         nextSkillAt = LongArray(skillCooldownsMs.size) { index ->
-            now + index * 350L
+            now + index * 1_000L
         }
         nextSkillIndex = 0
         handler.removeCallbacks(attackLoop)
