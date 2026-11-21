@@ -28,6 +28,14 @@ jobs:
         with:
           gradle-version: "8.9"
 
+      # Keep the same debug signing key between runner builds so updates install
+      # over the previous APK instead of triggering a signature mismatch.
+      - name: Restore persistent debug signing key
+        uses: actions/cache@v4
+        with:
+          path: ~/.android/debug.keystore
+          key: diablo-debug-signing-v1
+
       - name: Build debug APK
         run: gradle --no-daemon :app:assembleDebug
         working-directory: android
