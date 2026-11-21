@@ -2,8 +2,12 @@ package com.ozcanbtl.diabloassistant
 
 import android.accessibilityservice.AccessibilityService
 import android.accessibilityservice.GestureDescription
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.graphics.Path
+import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.view.accessibility.AccessibilityEvent
@@ -17,17 +21,32 @@ class GameTapAccessibilityService : AccessibilityService() {
     private val handler = Handler(Looper.getMainLooper())
     private var running = false
     private var step = 0
+    private var receiverRegistered = false
+
+    private val commandReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            when (intent?.action) {
+                ACTION_START -> startAttack()
+                ACTION_STOP -> stopAttack()
+            }
+        }
+    }
 
     override fun onServiceConnected() {
         super.onServiceConnected()
-    }
-
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        when (intent?.action) {
-            ACTION_START -> startAttack()
-            ACTION_STOP -> stopAttack()
+        if (!receiverRegistered) {
+            val filter = IntentFilter().apply {
+                addAction(ACTION_START)
+                addAction(ACTION_STOP)
+            }
+            if (Build.VERSION.SDK_INT >= 33) {
+                registerReceiver(commandReceiver, filter, Context.RECEIVER_NOT_EXPORTED)
+            } else {
+                @Suppress("DEPRECATION")
+                registerReceiver(commandReceiver, filter)
+            }
+            receiverRegistered = true
         }
-        return START_STICKY
     }
 
     private fun startAttack() {
@@ -39,7 +58,7 @@ class GameTapAccessibilityService : AccessibilityService() {
 
     private fun stopAttack() {
         running = false
-        handler.removeCallbacksAndMessages(null)
+        handler.removeCallbacks(attackLoop)
     }
 
     private val attackLoop = object : Runnable {
@@ -47,9 +66,7 @@ class GameTapAccessibilityService : AccessibilityService() {
             if (!running) return
             val w = resources.displayMetrics.widthPixels.toFloat()
             val h = resources.displayMetrics.heightPixels.toFloat()
-
-            // Landscape standard-layout estimate: four skill buttons along the lower-right,
-            // primary attack above/right. These are provisional tap zones, not enemy detection.
+            // Provisional landscape tap positions; this is a fixed macro, not enemy detection.
             val taps = listOf(
                 Pair(0.72f, 0.86f), // Ateş Hortumu
                 Pair(0.79f, 0.86f), // Dikenli Zırh
@@ -74,5 +91,13 @@ class GameTapAccessibilityService : AccessibilityService() {
 
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {}
     override fun onInterrupt() { stopAttack() }
-    override fun onDestroy() { stopAttack(); super.onDestroy() }
+
+    override fun onDestroy() {
+        stopAttack()
+        if (receiverRegistered) {
+            unregisterReceiver(commandReceiver)
+            receiverRegistered = false
+        }
+        super.onDestroy()
+    }
 }
