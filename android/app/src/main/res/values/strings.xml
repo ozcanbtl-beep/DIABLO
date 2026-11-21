@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">DIABLO Assistant</string>
+    <string name="accessibility_service_description">DIABLO oyununda kullanıcının başlattığı ve durdurabildiği dokunma makrosu.</string>
+</resources>
